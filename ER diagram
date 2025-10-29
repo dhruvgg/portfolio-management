@@ -1,0 +1,93 @@
+erDiagram
+    Users ||--o{ Portfolios : "owns"
+    Users ||--o{ Watchlist : "maintains"
+    Portfolios ||--o{ Portfolio_Holdings : "contains"
+    Portfolios ||--o{ Transactions : "records"
+    Portfolios ||--o{ Performance_Metrics : "tracks"
+    Assets ||--o{ Portfolio_Holdings : "held in"
+    Assets ||--o{ Transactions : "traded"
+    Assets ||--o{ Watchlist : "watched"
+    Asset_Categories ||--o{ Assets : "categorizes"
+
+    Users {
+        int user_id PK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        varchar phone
+        date date_of_birth
+        text address
+        timestamp registration_date
+        enum status
+    }
+
+    Portfolios {
+        int portfolio_id PK
+        int user_id FK
+        varchar portfolio_name
+        enum portfolio_type
+        timestamp creation_date
+        decimal total_value
+        varchar currency
+        enum status
+    }
+
+    Asset_Categories {
+        int category_id PK
+        varchar category_name UK
+        text description
+        enum risk_level
+    }
+
+    Assets {
+        int asset_id PK
+        int category_id FK
+        varchar asset_symbol UK
+        varchar asset_name
+        enum asset_type
+        decimal current_price
+        timestamp last_updated
+        varchar exchange
+    }
+
+    Portfolio_Holdings {
+        int holding_id PK
+        int portfolio_id FK
+        int asset_id FK
+        decimal quantity
+        decimal purchase_price
+        date purchase_date
+        decimal current_value
+    }
+
+    Transactions {
+        int transaction_id PK
+        int portfolio_id FK
+        int asset_id FK
+        enum transaction_type
+        decimal quantity
+        decimal price_per_unit
+        decimal total_amount
+        timestamp transaction_date
+        decimal fees
+        text notes
+    }
+
+    Performance_Metrics {
+        int metric_id PK
+        int portfolio_id FK
+        date metric_date
+        decimal total_value
+        decimal daily_return
+        decimal total_return
+        decimal benchmark_return
+    }
+
+    Watchlist {
+        int watchlist_id PK
+        int user_id FK
+        int asset_id FK
+        timestamp added_date
+        decimal target_price
+        text notes
+    }
